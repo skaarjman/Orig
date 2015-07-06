@@ -1,0 +1,1265 @@
+#library "auras"
+#include "zcommon.acs"
+#import "rpg.acs"
+#import "quest_sc.acs"
+#import "spells.acs"
+
+//Aura Library
+
+int aura_uptime[11] = // [aura id] in tics
+{35000,			//1
+2100,			//2
+2000,			//3
+1000,			//4
+350,			//5
+175,			//6
+4200,			//7
+175,			
+420,			//9
+420,
+175
+};
+
+str aura_name[11] =
+{
+"Prayer of Fortitude",			//1
+"Soul Fragment",				//2
+"Avenging Wrath" ,   			//3
+"IDK",							//4
+"Rend",
+"Deep Wounds",
+"Battle Shout",					//7
+"Deadly Poison",
+"Blood Plague",
+"Frost Fever",
+"Chains of Ice"
+
+};
+
+int aura_id[11] = 
+{
+1,
+2,
+3,
+4,
+5,
+6,
+7,
+8,
+9,
+10,
+11
+};
+
+int aura_type[11] =  // 1 - BUFF 2 - DEBUFF
+{
+1,
+1,
+1,
+1,
+2,
+2,
+1,
+2,
+2,
+2,
+2
+};
+
+
+int aura_id_player[4][10] =  // [Player][Aura number]
+{
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0}
+};
+
+int aura_up_player[4][10] = // [Player][Aura number] aura uptime in tics on every player
+{
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0}
+};
+
+int aura_target[4][10];
+
+
+//------------------------------------//
+//		   AURA HANDLER				  //
+//-----------------------------------//
+
+Script "aura_handler" (Void)
+
+{
+	sethudsize(1280,1024,False);
+		//aura 1 display----------------------------------------------------------------//
+			if(aura_id_player[Playernumber()][0])
+			{
+				
+				if(aura_target[Playernumber()][0] == Playernumber() +1337)
+				{
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][0]));
+					//hudmsg aura icon for self
+					hudmessage(s:"a";HUDMSG_PLAIN,7601,CR_WHITE,-170.0,150.0,0);
+					setfont("bigfont");
+					//player aura timer location
+						if(aura_up_player[Playernumber()][0] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][0]/35+1;HUDMSG_PLAIN,7600,CR_RED,-170.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][0] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][0]/35+1;HUDMSG_PLAIN,7600,CR_WHITE,-170.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][0] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][0]/35/60+1,s:" M";HUDMSG_PLAIN,7600,CR_WHITE,-170.0,185.0,0);
+							}
+				}
+				else if(aura_target[Playernumber()][0] != Playernumber() +1337)
+				{
+					//hudmsg aura icon for enemy
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][0]));
+					hudmessage(s:"a";HUDMSG_PLAIN,7601,CR_WHITE,1100.0,150.0,0);
+					setfont("bigfont");
+					//non - player timer location
+					if(aura_up_player[Playernumber()][0] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][0]/35+1;HUDMSG_PLAIN,7600,CR_RED,1100.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][0] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][0]/35+1;HUDMSG_PLAIN,7600,CR_WHITE,1100.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][0] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][0]/35/60+1,s:" M";HUDMSG_PLAIN,7600,CR_WHITE,1100.0,185.0,0);
+							}
+					
+					
+				}
+				//remove 1 aura when expired 
+				if(!aura_up_player[Playernumber()][0])
+				{
+					aura_id_player[Playernumber()][0] =0;
+					aura_target[Playernumber()][0] =0;
+					hudmessage(s:"";HUDMSG_PLAIN,7600,CR_WHITE,600.0,600.0,0);
+					hudmessage(s:"";HUDMSG_PLAIN,7601,CR_WHITE,600.0,600.0,0);
+				}
+			}//aura 1 display end---------------------------------------------------------------//
+			
+		//aura 2 display----------------------------------------------------------------//
+		if(aura_id_player[Playernumber()][1])
+			{
+				
+				if(aura_target[Playernumber()][1] == Playernumber() +1337)
+				{
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][1]));
+					//hudmsg aura icon for self
+					hudmessage(s:"a";HUDMSG_PLAIN,7604,CR_WHITE,-120.0,150.0,0);
+					setfont("bigfont");
+					//player aura timer location
+						if(aura_up_player[Playernumber()][1] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][1]/35+1;HUDMSG_PLAIN,7603,CR_RED,-120.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][1] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][1]/35+1;HUDMSG_PLAIN,7603,CR_WHITE,-120.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][1] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][1]/35/60+1,s:" M";HUDMSG_PLAIN,7603,CR_WHITE,-120.0,185.0,0);
+							}
+				}
+				else if(aura_target[Playernumber()][1] != Playernumber() +1337)
+				{
+					//hudmsg aura icon for enemy
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][1]));
+					hudmessage(s:"a";HUDMSG_PLAIN,7604,CR_WHITE,1150.0,150.0,0);
+					setfont("bigfont");
+					//non - player timer location
+					if(aura_up_player[Playernumber()][1] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][1]/35+1;HUDMSG_PLAIN,7603,CR_RED,1150.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][1] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][1]/35+1;HUDMSG_PLAIN,7603,CR_WHITE,1150.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][1] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][1]/35/60+1,s:" M";HUDMSG_PLAIN,7603,CR_WHITE,1150.0,185.0,0);
+							}
+					
+					
+				}
+				//remove 2 aura when expired 
+				if(!aura_up_player[Playernumber()][1])
+				{
+					aura_id_player[Playernumber()][1] =0;
+					aura_target[Playernumber()][1] =0;
+					hudmessage(s:"";HUDMSG_PLAIN,7603,CR_WHITE,600.0,600.0,0);
+					hudmessage(s:"";HUDMSG_PLAIN,7604,CR_WHITE,600.0,600.0,0);
+				}
+			}//aura 2 display end---------------------------------------------------------------//
+			
+			//aura 3 display----------------------------------------------------------------//
+			if(aura_id_player[Playernumber()][2])
+			{
+				
+				if(aura_target[Playernumber()][2] == Playernumber() +1337)
+				{
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][2]));
+					//hudmsg aura icon for self
+					hudmessage(s:"a";HUDMSG_PLAIN,7606,CR_WHITE,-70.0,150.0,0);
+					setfont("bigfont");
+					//player aura timer location
+					
+
+					
+						if(aura_up_player[Playernumber()][2] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][2]/35+1;HUDMSG_PLAIN,7605,CR_RED,-70.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][2] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][2]/35+1;HUDMSG_PLAIN,7605,CR_WHITE,-70.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][2] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][2]/35/60+1,s:" M";HUDMSG_PLAIN,7605,CR_WHITE,-70.0,185.0,0);
+							}		
+							
+				}
+				else if(aura_target[Playernumber()][2] != Playernumber() +1337)
+				{
+					//hudmsg aura icon for enemy
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][2]));
+					hudmessage(s:"a";HUDMSG_PLAIN,7606,CR_WHITE,1150.0,150.0,0);
+					//non - player timer location
+					
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][2]));	
+							hudmessage(s:"a";HUDMSG_PLAIN,7606,CR_WHITE,1200.0,150.0,0);
+							setfont("bigfont");
+								if(aura_up_player[Playernumber()][2] <= 35*10)
+									{
+										//hudmsg timer in mins +1 white font
+										hudmessage(d:aura_up_player[Playernumber()][2]/35+1;HUDMSG_PLAIN,7605,CR_RED,1200.0,185.0,0);
+									}
+							else if(aura_up_player[Playernumber()][2] < 35*120)
+									{
+										//hudmsg time in secs +1 white font
+										hudmessage(d:aura_up_player[Playernumber()][2]/35+1;HUDMSG_PLAIN,7605,CR_WHITE,1200.0,185.0,0);
+									}
+							else if(aura_up_player[Playernumber()][2] >= 35*102)
+									{
+										//hudmsg time in secs +1 red font
+										hudmessage(d:aura_up_player[Playernumber()][2]/35/60+1,s:" M";HUDMSG_PLAIN,7605,CR_WHITE,1200.0,185.0,0);
+									}
+
+					if(aura_target[Playernumber()][1] == Playernumber() +1337)
+						{
+							setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][2]));	
+							hudmessage(s:"a";HUDMSG_PLAIN,7606,CR_WHITE,1150.0,150.0,0);
+							setfont("bigfont");
+								if(aura_up_player[Playernumber()][2] <= 35*10)
+									{
+										//hudmsg timer in mins +1 white font
+										hudmessage(d:aura_up_player[Playernumber()][2]/35+1;HUDMSG_PLAIN,7605,CR_RED,1150.0,185.0,0);
+									}
+							else if(aura_up_player[Playernumber()][2] < 35*120)
+									{
+										//hudmsg time in secs +1 white font
+										hudmessage(d:aura_up_player[Playernumber()][2]/35+1;HUDMSG_PLAIN,7605,CR_WHITE,1150.0,185.0,0);
+									}
+							else if(aura_up_player[Playernumber()][2] >= 35*102)
+									{
+										//hudmsg time in secs +1 red font
+										hudmessage(d:aura_up_player[Playernumber()][2]/35/60+1,s:" M";HUDMSG_PLAIN,7605,CR_WHITE,1150.0,185.0,0);
+									}
+						}
+						
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][2]));	
+					if(aura_target[Playernumber()][0] == Playernumber() +1337)
+						{
+							hudmessage(s:"a";HUDMSG_PLAIN,7606,CR_WHITE,1100.0,150.0,0);
+							setfont("bigfont");
+								if(aura_up_player[Playernumber()][2] <= 35*10)
+									{
+										//hudmsg timer in mins +1 white font
+										hudmessage(d:aura_up_player[Playernumber()][2]/35+1;HUDMSG_PLAIN,7605,CR_RED,1100.0,185.0,0);
+									}
+							else if(aura_up_player[Playernumber()][2] < 35*120)
+									{
+										//hudmsg time in secs +1 white font
+										hudmessage(d:aura_up_player[Playernumber()][2]/35+1;HUDMSG_PLAIN,7605,CR_WHITE,1100.0,185.0,0);
+									}
+							else if(aura_up_player[Playernumber()][2] >= 35*102)
+									{
+										//hudmsg time in secs +1 red font
+										hudmessage(d:aura_up_player[Playernumber()][2]/35/60+1,s:" M";HUDMSG_PLAIN,7605,CR_WHITE,1100.0,185.0,0);
+									}
+						}
+							
+							
+							
+					
+					
+				}
+				//remove 3 aura when expired 
+				if(!aura_up_player[Playernumber()][2])
+				{
+					aura_id_player[Playernumber()][2] =0;
+					aura_target[Playernumber()][2] =0;
+					hudmessage(s:"";HUDMSG_PLAIN,7605,CR_WHITE,600.0,600.0,0);
+					hudmessage(s:"";HUDMSG_PLAIN,7606,CR_WHITE,600.0,600.0,0);
+				}
+			}//aura 3 display end---------------------------------------------------------------//
+			
+			
+			//aura 4 display----------------------------------------------------------------//
+			if(aura_id_player[Playernumber()][3])
+			{
+				
+				if(aura_target[Playernumber()][3] == Playernumber() +1337)
+				{
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][3]));
+					//hudmsg aura icon for self
+					hudmessage(s:"a";HUDMSG_PLAIN,7608,CR_WHITE,-20.0,150.0,0);
+					setfont("bigfont");
+					//player aura timer location
+						if(aura_up_player[Playernumber()][3] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][3]/35+1;HUDMSG_PLAIN,7607,CR_RED,-20.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][3] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][3]/35+1;HUDMSG_PLAIN,7607,CR_WHITE,-20.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][3] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][3]/35/60+1,s:" M";HUDMSG_PLAIN,7607,CR_WHITE,-20.0,185.0,0);
+							}
+				}
+				else if(aura_target[Playernumber()][3] != Playernumber() +1337)
+				{
+					//hudmsg aura icon for enemy
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][3]));
+					hudmessage(s:"a";HUDMSG_PLAIN,7608,CR_WHITE,1250.0,150.0,0);
+					setfont("bigfont");
+					//non - player timer location
+					if(aura_up_player[Playernumber()][3] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][3]/35+1;HUDMSG_PLAIN,7607,CR_RED,1250.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][3] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][3]/35+1;HUDMSG_PLAIN,7607,CR_WHITE,1250.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][3] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][3]/35/60+1,s:" M";HUDMSG_PLAIN,7607,CR_WHITE,1250.0,185.0,0);
+							}
+					
+					
+				}
+				//remove 4 aura when expired 
+				if(!aura_up_player[Playernumber()][3])
+				{
+					aura_id_player[Playernumber()][3] =0;
+					aura_target[Playernumber()][3] =0;
+					hudmessage(s:"";HUDMSG_PLAIN,7607,CR_WHITE,600.0,600.0,0);
+					hudmessage(s:"";HUDMSG_PLAIN,7608,CR_WHITE,600.0,600.0,0);
+				}
+			}//aura 4 display end---------------------------------------------------------------//
+			
+			//aura 5 display----------------------------------------------------------------//
+			if(aura_id_player[Playernumber()][4])
+			{
+				
+				if(aura_target[Playernumber()][4] == Playernumber() +1337)
+				{
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][4]));
+					//hudmsg aura icon for self
+					hudmessage(s:"a";HUDMSG_PLAIN,7610,CR_WHITE,30.0,150.0,0);
+					setfont("bigfont");
+					//player aura timer location
+						if(aura_up_player[Playernumber()][4] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][4]/35+1;HUDMSG_PLAIN,7609,CR_RED,30.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][4] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][4]/35+1;HUDMSG_PLAIN,7609,CR_WHITE,30.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][4] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][4]/35/60+1,s:" M";HUDMSG_PLAIN,7609,CR_WHITE,30.0,185.0,0);
+							}
+				}
+				else if(aura_target[Playernumber()][4] != Playernumber() +1337)
+				{
+					//hudmsg aura icon for enemy
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][4]));
+					hudmessage(s:"a";HUDMSG_PLAIN,7610,CR_WHITE,1300.0,150.0,0);
+					setfont("bigfont");
+					//non - player timer location
+					if(aura_up_player[Playernumber()][4]<= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][4]/35+1;HUDMSG_PLAIN,7609,CR_RED,1300.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][4] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][4]/35+1;HUDMSG_PLAIN,7609,CR_WHITE,1300.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][4] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][4]/35/60+1,s:" M";HUDMSG_PLAIN,7609,CR_WHITE,1300.0,185.0,0);
+							}
+					
+					
+				}
+				//remove 5 aura when expired 
+				if(!aura_up_player[Playernumber()][4])
+				{
+					aura_id_player[Playernumber()][4] =0;
+					aura_target[Playernumber()][4] =0;
+					hudmessage(s:"";HUDMSG_PLAIN,7609,CR_WHITE,600.0,600.0,0);
+					hudmessage(s:"";HUDMSG_PLAIN,7610,CR_WHITE,600.0,600.0,0);
+				}
+			}//aura 5 display end---------------------------------------------------------------//
+			
+			//aura 6 display----------------------------------------------------------------//
+			if(aura_id_player[Playernumber()][5])
+			{
+				
+				if(aura_target[Playernumber()][5] == Playernumber() +1337)
+				{
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][5]));
+					//hudmsg aura icon for self
+					hudmessage(s:"a";HUDMSG_PLAIN,7612,CR_WHITE,80.0,150.0,0);
+					setfont("bigfont");
+					//player aura timer location
+						if(aura_up_player[Playernumber()][5] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][5]/35+1;HUDMSG_PLAIN,7611,CR_RED,80.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][5] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][5]/35+1;HUDMSG_PLAIN,7611,CR_WHITE,80.0,185.0,0);
+							}
+					else if(aura_up_player[Playernumber()][5] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][5]/35/60+1,s:" M";HUDMSG_PLAIN,7611,CR_WHITE,80.0,185.0,0);
+							}
+				}
+				else if(aura_target[Playernumber()][5] != Playernumber() +1337)
+				{
+					//hudmsg aura icon for enemy
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][5]));
+					hudmessage(s:"a";HUDMSG_PLAIN,7612,CR_WHITE,1100.0,210.0,0);
+					setfont("bigfont");
+					//non - player timer location
+					if(aura_up_player[Playernumber()][5]<= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][5]/35+1;HUDMSG_PLAIN,7611,CR_RED,1100.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][5] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][5]/35+1;HUDMSG_PLAIN,7611,CR_WHITE,1100.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][5] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][5]/35/60+1,s:" M";HUDMSG_PLAIN,7611,CR_WHITE,1100.0,245.0,0);
+							}
+					
+					
+				}
+				//remove 6 aura when expired 
+				if(!aura_up_player[Playernumber()][5])
+				{
+					aura_id_player[Playernumber()][5] =0;
+					aura_target[Playernumber()][5] =0;
+					hudmessage(s:"";HUDMSG_PLAIN,7612,CR_WHITE,600.0,600.0,0);
+					hudmessage(s:"";HUDMSG_PLAIN,7611,CR_WHITE,600.0,600.0,0);
+				}
+			}//aura 6 display end---------------------------------------------------------------//
+			
+			//aura 7 display----------------------------------------------------------------//
+			if(aura_id_player[Playernumber()][6])
+			{
+				
+				if(aura_target[Playernumber()][6] == Playernumber() +1337)
+				{
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][6]));
+					//hudmsg aura icon for self
+					hudmessage(s:"a";HUDMSG_PLAIN,7614,CR_WHITE,-170.0,210.0,0);
+					setfont("bigfont");
+					//player aura timer location
+						if(aura_up_player[Playernumber()][6] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][6]/35+1;HUDMSG_PLAIN,7613,CR_RED,-170.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][6] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][6]/35+1;HUDMSG_PLAIN,7613,CR_WHITE,-170.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][6] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][6]/35/60+1,s:" M";HUDMSG_PLAIN,7613,CR_WHITE,-170.0,245.0,0);
+							}
+				}
+				else if(aura_target[Playernumber()][6] != Playernumber() +1337)
+				{
+					//hudmsg aura icon for enemy
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][6]));
+					hudmessage(s:"a";HUDMSG_PLAIN,7614,CR_WHITE,1150.0,210.0,0);
+					setfont("bigfont");
+					//non - player timer location
+					if(aura_up_player[Playernumber()][6]<= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][6]/35+1;HUDMSG_PLAIN,7613,CR_RED,1150.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][6] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][6]/35+1;HUDMSG_PLAIN,7613,CR_WHITE,1150.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][6] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][6]/35/60+1,s:" M";HUDMSG_PLAIN,7613,CR_WHITE,1150.0,245.0,0);
+							}
+					
+					
+				}
+				//remove 7 aura when expired 
+				if(!aura_up_player[Playernumber()][6])
+				{
+					aura_id_player[Playernumber()][6] =0;
+					aura_target[Playernumber()][6] =0;
+					hudmessage(s:"";HUDMSG_PLAIN,7613,CR_WHITE,600.0,600.0,0);
+					hudmessage(s:"";HUDMSG_PLAIN,7614,CR_WHITE,600.0,600.0,0);
+				}
+			}//aura 7 display end---------------------------------------------------------------//
+			
+			//aura 8 display----------------------------------------------------------------//
+			if(aura_id_player[Playernumber()][7])
+			{
+				
+				if(aura_target[Playernumber()][7] == Playernumber() +1337)
+				{
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][7]));
+					//hudmsg aura icon for self
+					hudmessage(s:"a";HUDMSG_PLAIN,7614,CR_WHITE,-120.0,210.0,0);
+					setfont("bigfont");
+					//player aura timer location
+						if(aura_up_player[Playernumber()][7] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][7]/35+1;HUDMSG_PLAIN,7613,CR_RED,-120.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][7] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][7]/35+1;HUDMSG_PLAIN,7613,CR_WHITE,-120.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][7] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][7]/35/60+1,s:" M";HUDMSG_PLAIN,7613,CR_WHITE,-120.0,245.0,0);
+							}
+				}
+				else if(aura_target[Playernumber()][7] != Playernumber() +1337)
+				{
+					//hudmsg aura icon for enemy
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][7]));
+					hudmessage(s:"a";HUDMSG_PLAIN,7614,CR_WHITE,1200.0,210.0,0);
+					setfont("bigfont");
+					//non - player timer location
+					if(aura_up_player[Playernumber()][7]<= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][7]/35+1;HUDMSG_PLAIN,7613,CR_RED,1200.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][7] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][7]/35+1;HUDMSG_PLAIN,7613,CR_WHITE,1200.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][7] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][7]/35/60+1,s:" M";HUDMSG_PLAIN,7613,CR_WHITE,1200.0,245.0,0);
+							}
+					
+					
+				}
+				//remove 8 aura when expired 
+				if(!aura_up_player[Playernumber()][7])
+				{
+					aura_id_player[Playernumber()][7] =0;
+					aura_target[Playernumber()][7] =0;
+					hudmessage(s:"";HUDMSG_PLAIN,7613,CR_WHITE,600.0,600.0,0);
+					hudmessage(s:"";HUDMSG_PLAIN,7614,CR_WHITE,600.0,600.0,0);
+				}
+			}//aura 8 display end---------------------------------------------------------------//
+			
+			//aura 9 display----------------------------------------------------------------//
+			if(aura_id_player[Playernumber()][8])
+			{
+				
+				if(aura_target[Playernumber()][8] == Playernumber() +1337)
+				{
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][8]));
+					//hudmsg aura icon for self
+					hudmessage(s:"a";HUDMSG_PLAIN,7616,CR_WHITE,-120.0,210.0,0);
+					setfont("bigfont");
+					//player aura timer location
+						if(aura_up_player[Playernumber()][8] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][8]/35+1;HUDMSG_PLAIN,7615,CR_RED,-120.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][8] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][8]/35+1;HUDMSG_PLAIN,7615,CR_WHITE,-120.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][8] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][8]/35/60+1,s:" M";HUDMSG_PLAIN,7615,CR_WHITE,-120.0,245.0,0);
+							}
+				}
+				else if(aura_target[Playernumber()][8] != Playernumber() +1337)
+				{
+					//hudmsg aura icon for enemy
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][8]));
+					hudmessage(s:"a";HUDMSG_PLAIN,7616,CR_WHITE,1250.0,210.0,0);
+					setfont("bigfont");
+					//non - player timer location
+					if(aura_up_player[Playernumber()][8]<= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][8]/35+1;HUDMSG_PLAIN,7615,CR_RED,1250.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][8] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][8]/35+1;HUDMSG_PLAIN,7615,CR_WHITE,1250.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][8] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][8]/35/60+1,s:" M";HUDMSG_PLAIN,7615,CR_WHITE,1250.0,245.0,0);
+							}
+					
+					
+				}
+				//remove 9 aura when expired 
+				if(!aura_up_player[Playernumber()][8])
+				{
+					aura_id_player[Playernumber()][8] =0;
+					aura_target[Playernumber()][8] =0;
+					hudmessage(s:"";HUDMSG_PLAIN,7615,CR_WHITE,600.0,600.0,0);
+					hudmessage(s:"";HUDMSG_PLAIN,7616,CR_WHITE,600.0,600.0,0);
+				}
+			}//aura9 display end---------------------------------------------------------------//
+			
+			//aura 10 display----------------------------------------------------------------//
+			if(aura_id_player[Playernumber()][9])
+			{
+				
+				if(aura_target[Playernumber()][9] == Playernumber() +1337)
+				{
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][9]));
+					//hudmsg aura icon for self
+					hudmessage(s:"a";HUDMSG_PLAIN,7618,CR_WHITE,-120.0,210.0,0);
+					setfont("bigfont");
+					//player aura timer location
+						if(aura_up_player[Playernumber()][9] <= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][9]/35+1;HUDMSG_PLAIN,7617,CR_RED,-120.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][9] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][9]/35+1;HUDMSG_PLAIN,7617,CR_WHITE,-120.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][9] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][9]/35/60+1,s:" M";HUDMSG_PLAIN,7617,CR_WHITE,-120.0,245.0,0);
+							}
+				}
+				else if(aura_target[Playernumber()][9] != Playernumber() +1337)
+				{
+					//hudmsg aura icon for enemy
+					setfont(strparam(s:"aura",d:aura_id_player[Playernumber()][9]));
+					hudmessage(s:"a";HUDMSG_PLAIN,7618,CR_WHITE,1300.0,210.0,0);
+					setfont("bigfont");
+					//non - player timer location
+					if(aura_up_player[Playernumber()][9]<= 35*10)
+							{
+								//hudmsg timer in mins +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][9]/35+1;HUDMSG_PLAIN,7617,CR_RED,1300.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][9] < 35*120)
+							{
+								//hudmsg time in secs +1 white font
+								hudmessage(d:aura_up_player[Playernumber()][9]/35+1;HUDMSG_PLAIN,7617,CR_WHITE,1300.0,245.0,0);
+							}
+					else if(aura_up_player[Playernumber()][9] >= 35*102)
+							{
+								//hudmsg time in secs +1 red font
+								hudmessage(d:aura_up_player[Playernumber()][9]/35/60+1,s:" M";HUDMSG_PLAIN,7617,CR_WHITE,1300.0,245.0,0);
+							}
+					
+					
+				}
+				//remove 10 aura when expired 
+				if(!aura_up_player[Playernumber()][9])
+				{
+					aura_id_player[Playernumber()][9] =0;
+					aura_target[Playernumber()][9] =0;
+					hudmessage(s:"";HUDMSG_PLAIN,7617,CR_WHITE,600.0,600.0,0);
+					hudmessage(s:"";HUDMSG_PLAIN,7618,CR_WHITE,600.0,600.0,0);
+				}
+			}//aura10 display end---------------------------------------------------------------//
+		Delay(1);
+		restart;
+			
+	
+	
+	
+	
+	
+}
+
+
+
+
+
+//------------------------------------//
+//		   APPLY AURA   			  //
+//-----------------------------------//
+
+Script "apply_aura" (int auraid)
+{
+	//lets check if you don't have this aura you know
+	for(int tyty=0;tyty<9;tyty++)
+	{
+		if(aura_id_player[Playernumber()][tyty] == auraid)
+		{
+			if(aura_type[auraid-1] ==1 && (ClassifyActor(oldtidd[Playernumber()]) & ACTOR_MONSTER))
+			{
+				Log(s:"buff on monster ? wat");
+				terminate;
+			}
+			
+			Print(s:"AURA reapplied to ",d:tyty,s:" slot");
+			acs_namedexecute(strparam(s:"aura",d:auraid),0,2,oldtidd[Playernumber()],tyty);
+			Delay(2);
+			aura_id_player[Playernumber()][tyty] = auraid;
+			aura_up_player[Playernumber()][tyty] = aura_uptime[auraid-1];
+			acs_namedexecute(strparam(s:"aura",d:auraid),0,1,oldtidd[Playernumber()],tyty);
+			terminate;
+		}
+	}
+	//okay we didn't found our buddies, lets find an empty slot
+	for(tyty=0;tyty<9;tyty++)
+	{
+		if(!aura_id_player[Playernumber()][tyty]) //&& !(ClassifyActor(oldtidd[Playernumber()]) & ACTOR_MONSTER)
+		{
+			if(aura_type[auraid-1] ==1 && (ClassifyActor(oldtidd[Playernumber()]) & ACTOR_MONSTER))
+			{
+				Log(s:"buff on monster ? wat");
+				terminate;
+			}
+			
+			acs_namedexecute(strparam(s:"aura",d:auraid),0,1,oldtidd[Playernumber()],tyty);
+			aura_id_player[Playernumber()][tyty] = auraid;
+			Print(s:"AURA applied to ",d:tyty+1,s:" slot");
+			aura_up_player[Playernumber()][tyty] = aura_uptime[auraid-1];
+			terminate;
+		}
+	}
+	
+	//damn there is no free slots either. goodbye then
+	terminate;
+	
+}
+
+
+
+
+
+
+Script "aura_timer" (Void)
+	{
+		for(int fucky =0;fucky<10;fucky++)
+			{
+				if(aura_up_player[Playernumber()][fucky])
+					{
+						aura_up_player[Playernumber()][fucky]--;
+					}
+				
+					
+					
+			}
+		Delay(1);
+		restart;
+	}
+
+	
+	
+	
+
+	
+	
+	
+//-----------------------------//
+//---PRAYER OF FORTITUDE-------//
+//-----------------------------//	
+Script "aura1" (int action, int retarg,int whichslot) // action 1 - apply,  action 2 - remove stat or benefit // retarg - target to actor to applys aura
+	{
+		if((ClassifyActor(oldtidd[Playernumber()]) & ACTOR_MONSTER))
+		{
+			Print(s:"Trying apply fucking aura to monster ?? WTF");
+			terminate;
+		}
+		
+		if(action == 1)
+			{
+				aura_target[Playernumber()][whichslot] = retarg;
+				stat[retarg][6] = stat[retarg][6] + 3;
+				log(s:"aura 1 apply whichslot: ",d:whichslot,s:" retarg: ",d:retarg);
+			}
+		else if(action == 2)
+			{
+				stat[retarg][6] = stat[retarg][6] -3;
+				print(s:"aura 1 remove");
+			}
+	}
+
+	
+	
+	
+//-----------------------------//
+//---BATTLE SHOUT--------------//
+//-----------------------------//	
+Script "aura7" (int action, int retarg,int whichslot) // action 1 - apply,  action 2 - remove stat or benefit // retarg - target to actor to applys aura
+	{
+		if((ClassifyActor(oldtidd[Playernumber()]) & ACTOR_MONSTER))
+		{
+			Print(s:"Trying apply fucking aura to monster ?? WTF");
+			terminate;
+		}
+		
+		if(action == 1)
+			{
+				aura_target[Playernumber()][whichslot] = retarg;
+				stat[retarg-1337][0] = stat[retarg-1337][0] + 256;
+			}
+		else if(action == 2)
+			{
+				stat[retarg-1337][0] = stat[retarg-1337][0] - 256;
+			}
+	}
+	
+	
+	Script "aura0" (Void)
+		{
+		
+		}
+
+	
+	//stat[4][7]
+	
+	/*
+int item_str[5]
+int item_def[5]
+int item_mana[5]
+int item_agi[5]
+int item_sp[5]
+int item_haste[5]
+int item_stamina[5]
+
+	*/
+	
+
+//-----------------------------------------------//
+//-----SHADoWMOURNE STR soul fragment------------//
+//----------------------------------------------//	
+
+Script "aura2" (int action, int retarg) // action 1 - apply,  action 2 - remove stat or benefit // retarg - target to actor to applys aura
+	{
+		if((ClassifyActor(oldtidd[Playernumber()]) & ACTOR_MONSTER))
+		{
+			Print(s:"Trying apply fucking aura to monster ?? WTF");
+			terminate;
+		}
+		
+		if(action == 1)
+			{
+				stat[retarg][0] = stat[retarg][0] + 90;
+				playsound(0,"smrn1");
+			}
+	else if(action == 2)
+			{
+				stat[retarg][0] = stat[retarg][0] -90;
+			}
+	}
+	
+	
+	
+	
+	
+
+	
+	
+//-----------------------------//
+//-----DEEP WOUNDS-------------//
+//-----------------------------//	
+
+Script "aura6" (int action, int retarg,int whichslot) // action 1 - apply,  action 2 - remove stat or benefit // retarg - target to actor to applys aura// whichslot - where aura is applied
+	{
+		
+		if(oldtidd[Playernumber()] == Playernumber() + 1337)
+		{
+			Log(s:"Can't apply deep wounds to yourself tho.");
+			terminate;
+		}
+		
+		if(action == 1)
+			{
+				aura_target[Playernumber()][whichslot] = retarg;
+				acs_namedexecute("aura6_script",0,whichslot,0,0);
+				playsound(0,"rend");
+			}
+		else if(action == 2)
+			{
+				aura_up_player[Playernumber()][whichslot] =0;
+			}
+	}
+	
+Script "aura6_script" (int whatid)
+{
+int oldtrg;
+	oldtrg = oldtidd[Playernumber()];
+	while(aura_up_player[Playernumber()][whatid])
+	{
+		Thing_Damage (oldtidd[Playernumber()], 5+stat[Playernumber()][0], 0);
+		Delay(2);
+		acs_namedexecute("find_dmgslot",0,5+stat[Playernumber()][0],5,6);
+		Delay(33);
+		
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------//	
+
+
+
+	
+//-----------------------------//
+//-----DEADLY POISON---aura8-//
+//-----------------------------//	
+
+Script "aura8" (int action, int retarg,int whichslot) // action 1 - apply,  action 2 - remove stat or benefit // retarg - target to actor to applys aura// whichslot - where aura is applied
+	{
+		
+		if(oldtidd[Playernumber()] == Playernumber() + 1337)
+		{
+			Log(s:"Can't apply deadly poison to yourself tho.");
+			terminate;
+		}
+		
+		if(action == 1)
+			{
+				aura_target[Playernumber()][whichslot] = retarg;
+				acs_namedexecute("aura8_script",0,whichslot,0,0);
+				//Thingsound(Playernumber()+1337,"poisonim",127);
+				Playsound(0,"poisonim");
+			}
+		else if(action == 2)
+			{
+				aura_up_player[Playernumber()][whichslot] =0;
+			}
+	}
+	
+Script "aura8_script" (int whatid)
+{
+int oldtrg;
+	oldtrg = oldtidd[Playernumber()];
+	while(aura_up_player[Playernumber()][whatid])
+	{
+		Thing_Damage (oldtidd[Playernumber()], 5+stat[Playernumber()][3], 0);
+		Delay(2);
+		acs_namedexecute("find_dmgslot",0,5+stat[Playernumber()][3],5,8);
+		Delay(33);
+		
+		if(oldtidd[Playernumber()] != oldtrg)
+			{
+				terminate;
+			}
+		
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------//	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-----------------------------//
+//-----REND-------------//
+//-----------------------------//	
+
+Script "aura5" (int action, int retarg,int whichslot) // action 1 - apply,  action 2 - remove stat or benefit // retarg - target to actor to applys aura// whichslot - where aura is applied
+	{
+		
+		if(oldtidd[Playernumber()] == Playernumber() + 1337)
+		{
+			Log(s:"Can't apply deep wounds to yourself tho.");
+			terminate;
+		}
+		
+		if(action == 1)
+			{
+				aura_target[Playernumber()][whichslot] = retarg;
+				acs_namedexecute("aura5_script",0,whichslot,0,0);
+				playsound(0,"rend");
+				Log(s:"aura 5 apply aura_target[Playernumber()][whichslot] : ",d:aura_target[Playernumber()][whichslot]);
+			}
+		else if(action == 2)
+			{
+				aura_up_player[Playernumber()][whichslot] =0;
+				print(s:"aura 5 remove");
+			}
+	}
+	
+Script "aura5_script" (int whatid)
+{
+int oldtrg;
+	oldtrg = oldtidd[Playernumber()];
+	while(aura_up_player[Playernumber()][whatid])
+	{
+		Thing_Damage (oldtidd[Playernumber()], stat[Playernumber()][0]/2+5, 0);
+		Delay(2);
+		acs_namedexecute("find_dmgslot",0,stat[Playernumber()][0]/2+5,5,5);
+		Delay(33);
+		
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------//	
+	
+	
+//-----------------------------//
+//-----BLOOD PLAGUE--aura9-//
+//-----------------------------//	
+
+Script "aura9" (int action, int retarg,int whichslot) // action 1 - apply,  action 2 - remove stat or benefit // retarg - target to actor to applys aura// whichslot - where aura is applied
+	{
+		
+		if(oldtidd[Playernumber()] == Playernumber() + 1337)
+		{
+			Log(s:"Can't apply Blood plague to yourself tho.");
+			terminate;
+		}
+		
+		if(action == 1)
+			{
+				aura_target[Playernumber()][whichslot] = retarg;
+				acs_namedexecute("aura9_script",0,whichslot,0,0);
+				//Thingsound(Playernumber()+1337,"poisonim",127);
+				Playsound(0,"poisonim");
+			}
+		else if(action == 2)
+			{
+				aura_up_player[Playernumber()][whichslot] =0;
+			}
+	}
+	
+Script "aura9_script" (int whatid)
+{
+int oldtrg;
+	oldtrg = oldtidd[Playernumber()];
+	while(aura_up_player[Playernumber()][whatid])
+	{
+		Thing_Damage (oldtidd[Playernumber()], 5+stat[Playernumber()][0], 0);
+		Delay(2);
+		acs_namedexecute("find_dmgslot",0,5+stat[Playernumber()][0],5,9);
+		Delay(33);
+		
+		if(oldtidd[Playernumber()] != oldtrg)
+			{
+				terminate;
+			}
+		
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------//	
+
+//-----------------------------//
+//-----FROST FEVER--aura10-//
+//-----------------------------//	
+
+Script "aura10" (int action, int retarg,int whichslot) // action 1 - apply,  action 2 - remove stat or benefit // retarg - target to actor to applys aura// whichslot - where aura is applied
+	{
+		
+		if(oldtidd[Playernumber()] == Playernumber() + 1337)
+		{
+			Log(s:"Can't apply Frost fever to yourself tho.");
+			terminate;
+		}
+		
+		if(action == 1)
+			{
+				aura_target[Playernumber()][whichslot] = retarg;
+				acs_namedexecute("aura10_script",0,whichslot,0,0);
+				//Thingsound(Playernumber()+1337,"poisonim",127);
+				Playsound(0,"poisonim");
+			}
+		else if(action == 2)
+			{
+				aura_up_player[Playernumber()][whichslot] =0;
+			}
+	}
+	
+Script "aura10_script" (int whatid)
+{
+int oldtrg;
+	oldtrg = oldtidd[Playernumber()];
+	while(aura_up_player[Playernumber()][whatid])
+	{
+		Thing_Damage (oldtidd[Playernumber()], 5+stat[Playernumber()][0], 0);
+		Delay(2);
+		acs_namedexecute("find_dmgslot",0,5+stat[Playernumber()][0],5,10);
+		Delay(33);
+		
+		if(oldtidd[Playernumber()] != oldtrg)
+			{
+				terminate;
+			}
+		
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------//	
+
+
+
+//-----------------------------//
+//-----Chains of ICE--aura11-//
+//-----------------------------//	
+
+Script "aura11" (int action, int retarg,int whichslot) // action 1 - apply,  action 2 - remove stat or benefit // retarg - target to actor to applys aura// whichslot - where aura is applied
+	{
+		
+		if(oldtidd[Playernumber()] == Playernumber() + 1337)
+		{
+			Log(s:"Can't apply Chains of ice to yourself tho.");
+			terminate;
+		}
+		
+		if(action == 1)
+			{
+				aura_target[Playernumber()][whichslot] = retarg;
+				acs_namedexecute("aura11_script",0,whichslot,0,0);
+				//Playsound(0,"poisonim");
+			}
+		else if(action == 2)
+			{
+				aura_up_player[Playernumber()][whichslot] =0;
+			}
+	}
+	
+Script "aura11_script" (int whatid)
+{
+int oldtrg;
+	oldtrg = oldtidd[Playernumber()];
+	while(aura_up_player[Playernumber()][whatid])
+	{
+		SetActorProperty (oldtidd[Playernumber()], APROP_SPEED, 0.2);
+		Delay(35);
+		
+		if(oldtidd[Playernumber()] != oldtrg)
+			{
+				SetActorProperty (oldtidd[Playernumber()], APROP_SPEED,5 << 16);
+				terminate;
+				
+			}
+		
+	}
+	SetActorProperty (oldtidd[Playernumber()], APROP_SPEED,5 << 16);
+	Log(s:"actor speed set to normal");
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------//	
+
+
+	
