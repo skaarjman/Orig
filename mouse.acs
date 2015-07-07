@@ -1,0 +1,3320 @@
+#library "mouse"
+#include "zcommon.acs"
+#import "rpg.acs"
+#import "uibar.acs"
+#import "ITEM.acs"
+
+
+int mouse_on[4] =
+{
+	0,0,0,0
+};
+
+
+
+//===========================================================================
+//
+// MOUSE INPUT
+//
+//===========================================================================
+
+// UI resolution
+#define UI_RES_WIDTH 1280
+#define UI_RES_HEIGHT 1024
+
+// the smallest tic for a HUDMessage
+#define HUDMSG_TIC 1.0 / 35 + 1
+
+// mouse cursor HUDMessage ID
+#define HMID_MOUSECURSOR 1
+
+
+
+script "Script_invMouseLoop" (void)
+{
+
+ SetPlayerProperty(0, ON, PROP_TOTALLYFROZEN);
+    // initialize cursor X and Y
+    int x = UI_RES_WIDTH / 2;
+    int y = UI_RES_HEIGHT / 2;
+    int dx;
+    int dy;
+
+    // mouse sensitivity multiplier
+    int xSensitivity = 1.0;
+    int ySensitivity = 1.0;
+	
+	acs_namedexecute("selectorp",0,1,0,0);
+	selection[Playernumber()] = 0;
+
+    while (TRUE)
+    {
+		
+		if(!mouse_on[Playernumber()])
+		{
+			SetPlayerProperty(0, OFF, PROP_TOTALLYFROZEN);
+			terminate;
+		}
+			
+        // poll player input
+        dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+            y -= dy;
+        else
+            y += dy;
+
+        // draw mouse cursor on screen
+        SetHUDSize(UI_RES_WIDTH, UI_RES_HEIGHT, 1);
+        SetFont("zcursor");
+        HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+
+
+    
+    
+      // debug: print mouse coords
+        int heh = 0;
+        if (heh)
+        {
+        SetFont("SmallFont");
+        Print(d: x, s: "/", d: y);
+        }
+
+int buttons;
+
+    buttons = getPlayerinput(-1,INPUT_BUTTONS);
+
+	//		XMAX			XMIN			YMAX		YMIN
+	
+	
+	//INventory slot 1 SELECT
+	
+	
+   if(x <= 925 && x >= 875 && y <= 675 && y >= 625 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 0;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 2 SELECT
+   if(x <= 975 && x >= 925 && y <= 675 && y >= 625 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 1;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 3 SELECT
+   if(x <= 1025 && x >= 975 && y <= 675 && y >= 625 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 2;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 4 SELECT
+   if(x <= 1075 && x >= 1025 && y <= 675 && y >= 625 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 3;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 5 SELECT
+   if(x <= 925 && x >= 875 && y <= 725 && y >= 675 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 4;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 6 SELECT
+   if(x <= 975 && x >= 925 && y <= 725 && y >= 675 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 5;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 7 SELECT
+   if(x <= 1025 && x >= 975 && y <= 725 && y >= 675 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 6;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 8 SELECT
+   if(x <= 1075 && x >= 1025 && y <= 725 && y >= 675 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 7;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 9 SELECT
+   if(x <= 925 && x >= 875 && y <= 775 && y >= 750 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 8;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 10 SELECT
+   if(x <= 975 && x >= 925 && y <= 775 && y >= 750 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 9;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 11 SELECT
+   if(x <= 1025 && x >= 975 && y <= 775 && y >= 750 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 10;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 12 SELECT
+   if(x <= 1075 && x >= 1025 && y <= 775 && y >= 750 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 11;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 13 SELECT
+   if(x <= 925 && x >= 875 && y <= 825 && y >= 800 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 12;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 14 SELECT
+   if(x <= 975 && x >= 925 && y <= 825 && y >= 800 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 13;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 15 SELECT
+   if(x <= 1025 && x >= 975 && y <= 825 && y >= 800 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 14;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//INventory slot 16 SELECT
+   if(x <= 1075 && x >= 1025 && y <= 825 && y >= 800 && buttons == BT_ATTACK)
+    {
+         selection[Playernumber()] = 15;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+
+	//INventory slot 1 EQUIP
+   if(x <= 925 && x >= 875 && y <= 675 && y >= 625 && buttons == BT_ALTATTACK)
+    {
+		
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 1)
+		{
+			 selection[Playernumber()] = 0;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+		{
+			buttons =0;
+		}
+		else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+setfont("smallfont");
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				
+				Print(s:"Can't equip this item ");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		else if(x <= 975 && x >= 925 && y <= 675 && y >= 625)
+		{
+			for(int wohoo=0;wohoo<16;wohoo++)
+			{
+				if(!wow_inventoryslot[Playernumber()][wohoo])
+				{
+					inv_slotswap(wohoo);
+					inv_redraw();
+				}
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}	
+			
+	
+
+	//INventory slot 2 EQUIP
+   if(x <= 975 && x >= 925 && y <= 675 && y >= 625 && buttons == BT_ALTATTACK)
+    {
+
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 2)
+		{
+			 selection[Playernumber()] = 1;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+
+	
+	//INventory slot 3 EQUIP
+   if(x <= 1025 && x >= 975 && y <= 675 && y >= 625 && buttons == BT_ALTATTACK)
+    {
+
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 3)
+		{
+			 selection[Playernumber()] = 2;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+	
+	//INventory slot 4 EQUIP
+   if(x <= 1075 && x >= 1025 && y <= 675 && y >= 625 && buttons == BT_ALTATTACK)
+    {
+		
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 4)
+		{
+			 selection[Playernumber()] = 3;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+
+	
+	
+//INventory slot 5 EQUIP
+   if(x <= 925 && x >= 875 && y <= 725 && y >= 675 && buttons == BT_ALTATTACK)
+    {
+		
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 5)
+		{
+			 selection[Playernumber()] = 4;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+	
+//INventory slot 6 EQUIP
+   if(x <= 975 && x >= 925 && y <= 725 && y >= 675 && buttons == BT_ALTATTACK)
+    {
+	
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 6)
+		{
+			 selection[Playernumber()] = 5;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+
+	//INventory slot 7 EQUIP
+   if(x <= 1025 && x >= 975 && y <= 725 && y >= 675 && buttons == BT_ALTATTACK)
+    {
+
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 7)
+		{
+			 selection[Playernumber()] = 6;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+	//INventory slot 8 EQUIP
+   if(x <= 1075 && x >= 1025 && y <= 725 && y >= 675 && buttons == BT_ALTATTACK)
+    {
+		
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 8)
+		{
+			 selection[Playernumber()] = 7;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+	
+	//INventory slot 9 EQUIP
+   if(x <= 925 && x >= 875 && y <= 775 && y >= 725 && buttons == BT_ALTATTACK)
+    {
+		
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 9)
+		{
+			 selection[Playernumber()] = 8;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+	
+	//INventory slot 10 EQUIP
+   if(x <= 975 && x >= 925 && y <= 775 && y >= 725 && buttons == BT_ALTATTACK)
+    {
+		
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 10)
+		{
+			 selection[Playernumber()] = 9;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+	//INventory slot 11 EQUIP
+   if(x <= 1025 && x >= 975 && y <= 775 && y >= 725 && buttons == BT_ALTATTACK)
+    {
+		
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 11)
+		{
+			 selection[Playernumber()] = 10;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+	
+//INventory slot 12 EQUIP
+   if(x <= 1075 && x >= 1025 && y <= 775 && y >= 725 && buttons == BT_ALTATTACK)
+    {
+		
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 12)
+		{
+			 selection[Playernumber()] = 11;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+		
+//INventory slot 13 EQUIP
+   if(x <= 925 && x >= 875 && y <= 825 && y >= 775 && buttons == BT_ALTATTACK)
+    {
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 13)
+		{
+			 selection[Playernumber()] = 12;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+			
+//INventory slot 14 EQUIP
+   if(x <= 975 && x >= 925 && y <= 825 && y >= 775 && buttons == BT_ALTATTACK)
+    {
+	
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 14)
+		{
+			 selection[Playernumber()] = 13;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+				
+//INventory slot 15 EQUIP
+   if(x <= 1025 && x >= 975 && y <= 825 && y >= 775 && buttons == BT_ALTATTACK)
+    {
+		
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 15)
+		{
+			 selection[Playernumber()] = 14;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	
+	playsound(0,"itemdrg",CHAN_AUTO);
+	
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+	
+	//INventory slot 16 EQUIP
+   if(x <= 1075 && x >= 1025 && y <= 825 && y >= 775 && buttons == BT_ALTATTACK)
+    {
+		
+		setfont("answer");
+		HUDMessage(s: "A"; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 1180.0, 855.0, 0);
+		
+		if(selection[Playernumber()] != 16)
+		{
+			 selection[Playernumber()] = 15;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+	
+	if(!wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		buttons =0;
+	}
+	else
+	{
+		playsound(0,"itemdrg",CHAN_AUTO);
+	}
+	
+	
+		while(buttons == BT_ALTATTACK)
+		{
+			
+		dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+		{
+            y -= dy;
+		}
+        else
+		{
+            y += dy;
+		}
+
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			setfont(strparam(s:"item",d:wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]));
+			HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+			Delay(1);
+setfont("smallfont");
+			
+		}
+		if(x <= 1280 && x >= 1180 && y <= 885 && y >= 820)
+		{
+			setfont("smallfont");
+			Print(s:"Dropped ",s:itemnames[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1]);
+				acs_namedexecute("item_unckup",0,wow_inventoryslot[Playernumber()][selection[Playernumber()]-1],0,0);
+				acs_namedexecute("inventory_reopen",0,0,0,0);
+		}
+		else if(x <= 1180 && x >= 1080 && y <= 885 && y >= 820)
+		{
+			if(!item_equipslots[wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]-1])
+			{
+				setfont("smallfont");
+				Print(s:"Can't equip this item");
+			}
+			else 
+			{
+				acs_namedexecute("item_equip",0,0,0,0);
+			}
+		}
+		
+		HUDMessage(s:""; HUDMSG_PLAIN, 12, CR_UNTRANSLATED, 0, 0, 0);
+	}
+
+	
+
+	
+	
+        Delay(1);
+    }
+}
+
+
+Script "inventory_reopen" (Void)
+{
+	acs_namedexecute("open_inventory",0,0,0,0);
+	Delay(2);
+	acs_namedexecute("open_inventory",0,0,0,0);
+}
+
+
+
+
+
+/*
+
+int yy;
+int xx;
+
+
+Script "Image" (Void)
+    {
+        sethudsize(1280,1024,False);
+        SetFont("image");
+        HUDMessage(s: "A"; HUDMSG_PLAIN, 3, CR_UNTRANSLATED, yy<<16, xx<<16, 0);
+    }
+    
+Script "Mover" ENTER
+        {sethudsize(1280,1024,False);
+        setfont("BIGFONT");
+            While(True)
+            {
+            
+        int buttonss;
+
+            buttonss = getPlayerinput(-1,BT_ATTACK);
+            
+            if(buttonss == BT_FORWARD)
+                {
+                        xx = xx - 3;
+                }
+            else if(buttonss == BT_BACK)
+                {
+                       xx = xx + 3; 
+                }
+             else if(buttonss == BT_MOVELEFT)
+                {
+                       yy = yy -3; 
+                }
+            else if(buttonss == BT_MOVERIGHT)
+                {
+                       yy = yy + 3; 
+                }
+            acs_namedexecute("Image",0,0,0,0);
+            
+            HUDMessage(d: xx,s:" / ",d:yy; HUDMSG_PLAIN, 4, CR_UNTRANSLATED, 800.0, 800.0, 0);
+            Delay(2);
+            }
+        }
+   */
+   
+   
+   
+   
+   
+   
+   
+   
+   
+script "Script_chrMouseLoop" ENTER
+{
+
+ SetPlayerProperty(0, ON, PROP_TOTALLYFROZEN);
+    // initialize cursor X and Y
+    int x = UI_RES_WIDTH / 2;
+    int y = UI_RES_HEIGHT / 2;
+    int dx;
+    int dy;
+
+    // mouse sensitivity multiplier
+    int xSensitivity = 1.0;
+    int ySensitivity = 1.0;
+	
+	acs_namedexecute("selectorp",0,1,0,0);
+	selection[Playernumber()] = 0;
+
+    while (TRUE)
+    {
+			
+		if(!mouse_on[Playernumber()])
+		{
+			SetPlayerProperty(0, OFF, PROP_TOTALLYFROZEN);
+			terminate;
+		}
+			
+        // poll player input
+        dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+            y -= dy;
+        else
+            y += dy;
+		
+		
+		int buttons;
+		
+		SetHUDSize(UI_RES_WIDTH, UI_RES_HEIGHT, 1);
+        SetFont("zcursor");
+        HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+		Delay(1);
+
+		
+		//Item selection 1
+		 if(x <= -125 && x >= -175 && y <= 540 && y >= 490 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 0;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	//Item selection 2
+	if(x <= -125 && x >= -175 && y <= 590 && y >= 540 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 1;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+
+	//Item selection 3
+	if(x <= -125 && x >= -175 && y <= 640 && y >= 590 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 2;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 4
+	if(x <= -125 && x >= -175 && y <= 690 && y >= 640 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 3;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 5
+	if(x <= -125 && x >= -175 && y <= 740 && y >= 690 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 4;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 6
+	if(x <= -125 && x >= -175 && y <= 790 && y >= 740 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 5;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 7
+	if(x <= -125 && x >= -175 && y <= 840 && y >= 790 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 6;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 8
+	if(x <= -125 && x >= -175 && y <= 890 && y >= 840 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 7;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	
+	
+	//slot 1 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 540 && y >= 490 && buttons == BT_ALTATTACK)
+    {
+
+		if(selection[Playernumber()] != 1)
+		{
+			selection[Playernumber()] =0;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 2 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 590 && y >= 540 && buttons == BT_ALTATTACK)
+    {
+		
+		if(selection[Playernumber()] != 2)
+		{
+			selection[Playernumber()] =1;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 3 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 640 && y >= 590 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 3)
+		{
+			selection[Playernumber()] =2;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 4 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 690 && y >= 640 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 4)
+		{
+			selection[Playernumber()] =3;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 5 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 740 && y >= 690 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 5)
+		{
+			selection[Playernumber()] =4;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 6 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 790 && y >= 740 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 6)
+		{
+			selection[Playernumber()] =5;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 7 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 840 && y >= 790 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 7)
+		{
+			selection[Playernumber()] =6;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 8 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 890 && y >= 840 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 8)
+		{
+			selection[Playernumber()] =7;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	}
+	
+	
+}
+   
+   
+   
+   
+   
+	
+	
+   
+   
+script "Script_splMouseLoop" (Void)
+{
+
+ SetPlayerProperty(0, ON, PROP_TOTALLYFROZEN);
+    // initialize cursor X and Y
+    int x = UI_RES_WIDTH / 2;
+    int y = UI_RES_HEIGHT / 2;
+    int dx;
+    int dy;
+
+    // mouse sensitivity multiplier
+    int xSensitivity = 1.0;
+    int ySensitivity = 1.0;
+	
+	acs_namedexecute("selectorp",0,1,0,0);
+	selection[Playernumber()] = 0;
+
+    while (TRUE)
+    {
+			
+		if(!mouse_on[Playernumber()])
+		{
+			SetPlayerProperty(0, OFF, PROP_TOTALLYFROZEN);
+			terminate;
+		}
+			
+        // poll player input
+        dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+            y -= dy;
+        else
+            y += dy;
+		
+		
+		int buttons;
+		
+		SetHUDSize(UI_RES_WIDTH, UI_RES_HEIGHT, 1);
+        SetFont("zcursor");
+        HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+		Delay(1);
+
+		
+		//Item selection 1
+		 if(x <= -125 && x >= -175 && y <= 540 && y >= 490 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 0;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	//Item selection 2
+	if(x <= -125 && x >= -175 && y <= 590 && y >= 540 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 1;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+
+	//Item selection 3
+	if(x <= -125 && x >= -175 && y <= 640 && y >= 590 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 2;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 4
+	if(x <= -125 && x >= -175 && y <= 690 && y >= 640 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 3;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 5
+	if(x <= -125 && x >= -175 && y <= 740 && y >= 690 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 4;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 6
+	if(x <= -125 && x >= -175 && y <= 790 && y >= 740 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 5;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 7
+	if(x <= -125 && x >= -175 && y <= 840 && y >= 790 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 6;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 8
+	if(x <= -125 && x >= -175 && y <= 890 && y >= 840 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 7;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	
+	
+	//slot 1 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 540 && y >= 490 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 1)
+		{
+			selection[Playernumber()] =0;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 2 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 590 && y >= 540 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 2)
+		{
+			selection[Playernumber()] =1;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 3 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 640 && y >= 590 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 3)
+		{
+			selection[Playernumber()] =2;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 4 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 690 && y >= 640 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 4)
+		{
+			selection[Playernumber()] =3;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 5 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 740 && y >= 690 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 5)
+		{
+			selection[Playernumber()] =4;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 6 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 790 && y >= 740 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 6)
+		{
+			selection[Playernumber()] =5;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 7 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 840 && y >= 790 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 7)
+		{
+			selection[Playernumber()] =6;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	//slot 8 unEQUIP
+   if(x <= -125 && x >= -175 && y <= 890 && y >= 840 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 8)
+		{
+			selection[Playernumber()] =7;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("item_unequip",0,0,0,0);
+	
+	}
+	
+	}
+	
+	
+}
+
+   
+   
+   
+   
+   
+    
+script "Script_bnkMouseLoop" (Void)
+{
+
+ SetPlayerProperty(0, ON, PROP_TOTALLYFROZEN);
+    // initialize cursor X and Y
+    int x = UI_RES_WIDTH / 2;
+    int y = UI_RES_HEIGHT / 2;
+    int dx;
+    int dy;
+
+    // mouse sensitivity multiplier
+    int xSensitivity = 1.0;
+    int ySensitivity = 1.0;
+	
+	acs_namedexecute("selectorp",0,1,0,0);
+	selection[Playernumber()] = 0;
+
+    while (TRUE)
+    {
+			
+		if(!mouse_on[Playernumber()])
+		{
+			SetPlayerProperty(0, OFF, PROP_TOTALLYFROZEN);
+			terminate;
+		}
+			
+        // poll player input
+        dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+            y -= dy;
+        else
+            y += dy;
+		
+		
+		int buttons;
+		
+		SetHUDSize(UI_RES_WIDTH, UI_RES_HEIGHT, 1);
+        SetFont("zcursor");
+        HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+		Delay(1);
+   
+  
+
+		
+		
+		//Item selection 1
+		 if(x <= 425 && x >= 375 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 0;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 2
+		 if(x <= 475 && x >= 425 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 1;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 3
+		 if(x <= 525 && x >= 475 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 2;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 4
+		 if(x <= 575 && x >= 525 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 3;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 5
+		 if(x <= 425 && x >= 375 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 4;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 6
+		 if(x <= 475 && x >= 425 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 5;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 7
+		 if(x <= 525 && x >= 475 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 6;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 8
+		 if(x <= 575 && x >= 525 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 7;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	
+	//Item selection 9
+		 if(x <= 425 && x >= 375 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 8;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 10
+		 if(x <= 475 && x >= 425 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 9;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 11
+		 if(x <= 525 && x >= 475 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 10;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 12
+		 if(x <= 575 && x >= 525 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 11;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 13
+		 if(x <= 425 && x >= 375 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 12;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 14
+		 if(x <= 475 && x >= 425 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 13;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 15
+		 if(x <= 525 && x >= 475 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 14;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 16
+		 if(x <= 575 && x >= 525 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 15;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 17
+		 if(x <= 675 && x >= 625 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 16;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 18
+		 if(x <= 725 && x >= 675 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 17;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 19
+		 if(x <= 775 && x >= 725 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 18;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 20
+		 if(x <= 825 && x >= 775 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 19;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+
+//Item selection 21
+		 if(x <= 875 && x >= 825 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 20;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }	
+	
+	//Item selection 22
+		 if(x <= 925 && x >= 875 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 21;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 23
+		 if(x <= 975 && x >= 925 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 22;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 24
+		 if(x <= 1025 && x >= 975 && y <= 600 && y >= 550 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 23;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 25
+		 if(x <= 675 && x >= 625 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 24;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 26
+		 if(x <= 725 && x >= 675 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 25;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 27
+		 if(x <= 775 && x >= 725 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 26;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 28
+		 if(x <= 825 && x >= 775 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 27;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 29
+		 if(x <= 875 && x >= 825 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 28;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 30
+		 if(x <= 925 && x >= 875 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 29;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 31
+		 if(x <= 975 && x >= 925 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 30;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 32
+		 if(x <= 1025 && x >= 975 && y <= 650 && y >= 600 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 31;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 33
+		 if(x <= 675 && x >= 625 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 32;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 34
+		 if(x <= 725 && x >= 675 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 33;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 35
+		 if(x <= 775 && x >= 725 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 34;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 36
+		 if(x <= 825 && x >= 775 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 35;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 37
+		 if(x <= 875 && x >= 825 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 36;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 38
+		 if(x <= 925 && x >= 875 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 37;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 39
+		 if(x <= 975 && x >= 925 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 38;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 40
+		 if(x <= 1025 && x >= 975 && y <= 700 && y >= 650 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 39;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 41
+		 if(x <= 675 && x >= 625 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 40;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 42
+		 if(x <= 725 && x >= 675 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 41;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 43
+		 if(x <= 775 && x >= 725 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 42;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+		
+	//Item selection 44
+		 if(x <= 825 && x >= 775 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 43;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 45
+		 if(x <= 875 && x >= 825 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 44;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 46
+		 if(x <= 925 && x >= 875 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 45;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 47
+		 if(x <= 975 && x >= 925 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 46;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	//Item selection 48
+		 if(x <= 1025 && x >= 975 && y <= 750 && y >= 700 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 47;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+
+    }
+	
+	
+	
+	
+		//slot 1 Place
+   if(x <= 425 && x >= 375 && y <= 600 && y >= 550 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 1)
+		{
+			selection[Playernumber()] =0;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	
+		//slot 2 Place
+   if(x <= 475 && x >= 425 && y <= 600 && y >= 550 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 2)
+		{
+			selection[Playernumber()] =1;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 3 Place
+   if(x <= 525 && x >= 475 && y <= 600 && y >= 550 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 3)
+		{
+			selection[Playernumber()] =2;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 4 Place
+   if(x <= 575 && x >= 525 && y <= 600 && y >= 550 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 4)
+		{
+			selection[Playernumber()] =3;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 5 Place
+   if(x <= 425 && x >= 375 && y <= 650 && y >= 600 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 5)
+		{
+			selection[Playernumber()] =4;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 6 Place
+   if(x <= 475 && x >= 425 && y <= 650 && y >= 600 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 6)
+		{
+			selection[Playernumber()] =5;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 7 Place
+   if(x <= 525 && x >= 475 && y <= 650 && y >= 600 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 7)
+		{
+			selection[Playernumber()] =6;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 8 Place
+   if(x <= 575 && x >= 525 && y <= 650 && y >= 600 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 8)
+		{
+			selection[Playernumber()] =7;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 9 Place
+   if(x <= 425 && x >= 375 && y <= 700 && y >= 650 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 9)
+		{
+			selection[Playernumber()] =8;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 10 Place
+   if(x <= 475 && x >= 425 && y <= 700 && y >= 650 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 10)
+		{
+			selection[Playernumber()] =9;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 11 Place
+   if(x <= 525 && x >= 475 && y <= 700 && y >= 650 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 11)
+		{
+			selection[Playernumber()] =10;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 12 Place
+   if(x <= 575 && x >= 525 && y <= 700 && y >= 650 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 12)
+		{
+			selection[Playernumber()] =11;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 13 Place
+   if(x <= 425 && x >= 375 && y <= 750 && y >= 700 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 13)
+		{
+			selection[Playernumber()] =12;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 14 Place
+   if(x <= 475 && x >= 425 && y <= 750 && y >= 700 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 14)
+		{
+			selection[Playernumber()] =13;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 15 Place
+   if(x <= 525 && x >= 475 && y <= 750 && y >= 700 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 15)
+		{
+			selection[Playernumber()] =14;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	//slot 16 Place
+   if(x <= 575 && x >= 525 && y <= 750 && y >= 700 && buttons == BT_ALTATTACK)
+    {
+		if(selection[Playernumber()] != 16)
+		{
+			selection[Playernumber()] =15;
+			acs_namedexecute("selectorp",0,0,0,0);
+		}
+		
+		while(buttons == BT_ALTATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		
+		acs_namedexecute("bank_place",0,0,0,0);
+
+	}
+	
+	
+	
+	
+	
+	}
+	
+}
+
+   
+   
+   
+   script "Script_qntMouseLoop" (Void)
+{
+
+ SetPlayerProperty(0, ON, PROP_TOTALLYFROZEN);
+    // initialize cursor X and Y
+    int x = UI_RES_WIDTH / 2;
+    int y = UI_RES_HEIGHT / 2;
+    int dx;
+    int dy;
+
+    // mouse sensitivity multiplier
+    int xSensitivity = 1.0;
+    int ySensitivity = 1.0;
+	
+	acs_namedexecute("selectorp",0,1,0,0);
+	selection[Playernumber()] = 0;
+
+    while (TRUE)
+    {
+			
+		if(!mouse_on[Playernumber()])
+		{
+			SetPlayerProperty(0, OFF, PROP_TOTALLYFROZEN);
+			terminate;
+		}
+			
+        // poll player input
+        dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+            y -= dy;
+        else
+            y += dy;
+		
+		
+		int buttons;
+		
+		SetHUDSize(UI_RES_WIDTH, UI_RES_HEIGHT, 1);
+        SetFont("zcursor");
+        HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+		buttons = getPlayerinput(-1,INPUT_BUTTONS);
+		Delay(1);
+		
+	//quantity selection 1
+		 if(x <= 335 && x >= 285 && y <= 545 && y >= 495 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 0;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		acs_namedexecute("action_button",0,0,0,0);
+
+    }
+	
+	//quantity selection 2
+		 if(x <= 403 && x >= 353 && y <= 545 && y >= 495 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 1;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		acs_namedexecute("action_button",0,0,0,0);
+
+    }
+	
+	//quantity selection 3
+		 if(x <= 480 && x >= 430 && y <= 545 && y >= 495 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 2;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		acs_namedexecute("action_button",0,0,0,0);
+
+    }
+	
+	//quantity selection 4
+		 if(x <= 550 && x >= 500 && y <= 545 && y >= 495 && buttons == BT_ATTACK)
+    {
+        selection[Playernumber()] = 3;
+        acs_namedexecute("selectorp",0,0,0,0);
+		while(buttons == BT_ATTACK)
+		{
+			buttons = getPlayerinput(-1,INPUT_BUTTONS);
+			Delay(1);
+		}
+		acs_namedexecute("action_button",0,0,0,0);
+
+    }
+   
+	}
+}
+   
+   //x <= 925 && x >= 875 && y <= 675 && y >= 625
+   
+   
+   
+   
+   function int  inv_slotswap(int wohoo)
+{
+	wow_inventoryslot[Playernumber()][wohoo] = wow_inventoryslot[Playernumber()][selection[Playernumber()]-1];
+	wow_inventoryslot[Playernumber()][selection[Playernumber()]-1] =0;	
+	
+	while(wow_inventoryslot[Playernumber()][selection[Playernumber()]-1])
+	{
+		wow_inventoryslot[Playernumber()][selection[Playernumber()]-1]--;
+		wow_invstack[Playernumber()][wohoo]++;
+	}
+
+	
+return 0;
+}
+	
+
+	
+	
+
+script "Script_ressMouseLoop" (void)
+{
+
+ SetPlayerProperty(0, ON, PROP_TOTALLYFROZEN);
+    // initialize cursor X and Y
+    int x = UI_RES_WIDTH / 2;
+    int y = UI_RES_HEIGHT / 2;
+    int dx;
+    int dy;
+
+    // mouse sensitivity multiplier
+    int xSensitivity = 1.0;
+    int ySensitivity = 1.0;
+	
+	acs_namedexecute("selectorp",0,1,0,0);
+	selection[Playernumber()] = 0;
+
+    while (TRUE)
+    {
+		
+		if(!mouse_on[Playernumber()])
+		{
+			SetPlayerProperty(0, OFF, PROP_TOTALLYFROZEN);
+			terminate;
+		}
+			
+        // poll player input
+        dx = FixedMul(xSensitivity, GetPlayerInput(-1, INPUT_YAW)) / 24;
+        x -= dx;
+        
+        dy = FixedMul(ySensitivity, GetPlayerInput(-1, INPUT_PITCH)) / 12;
+        if (!GetCVar("invertmouse"))
+            y -= dy;
+        else
+            y += dy;
+
+        // draw mouse cursor on screen
+        SetHUDSize(UI_RES_WIDTH, UI_RES_HEIGHT, 1);
+        SetFont("zcursor");
+        HUDMessage(s: "A"; HUDMSG_PLAIN, HMID_MOUSECURSOR, CR_UNTRANSLATED, (x << 16) + 0.1, (y << 16) + 0.1, HUDMSG_TIC);
+
+
+    
+    
+      // debug: print mouse coords
+        int heh = 0;
+        if (heh)
+        {
+        SetFont("SmallFont");
+        Print(d: x, s: "/", d: y);
+        }
+
+	int buttons;
+
+    buttons = getPlayerinput(-1,INPUT_BUTTONS);
+
+	
+	if(x <= 975 && x >= 925 && y <= 675 && y >= 625 && buttons == BT_ATTACK)
+	{
+		script_helper[Playernumber()][63]=2;
+	}
+	
+	
+	
+	
+	
+        Delay(1);
+    }
+}  
+   
+      
+Script "dots" ENTER
+    {sethudsize(1280,1024,0);
+		HUDMessage(s:"*"; HUDMSG_PLAIN, 7, CR_UNTRANSLATED, 925.0,675.0, 0); // Min X max Y
+        HUDMessage(s:"*"; HUDMSG_PLAIN, 6, CR_UNTRANSLATED, 925.0,625.0, 0); // min X min Y
+        
+        HUDMessage(s:"*"; HUDMSG_PLAIN, 8, CR_UNTRANSLATED, 975.0,675.0, 0); // max x max y
+        HUDMessage(s:"*"; HUDMSG_PLAIN, 9, CR_UNTRANSLATED, 975.0,625.0, 0); // max x min y
+    }
+
+   
+   
+   
